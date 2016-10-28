@@ -18,4 +18,4 @@ var texts = fileRoutes.map(function(route) {
 
 var bampos = makeBampos(texts, noBampoTag);
 
-console.log(bampos);
+//console.log(bampos);
