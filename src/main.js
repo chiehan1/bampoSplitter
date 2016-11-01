@@ -1,34 +1,23 @@
-var prePageTag = '<pb id="prePage"/>\n';
-var emptyPrePageRegex = new RegExp(prePageTag + '\\s*', 'g');
-var delim = '~!iamdelim~!';
+var firstLineIsPb = /^\s*?<pb id/;
+var delim = 'IAmDelimiter';
+
+
 var sutraRegex = /<sutra id="[^<>]*(\d+)[^<>\d]*"\/>/;
 
-function split20Page(pages) {
-  var results = [];
-  pages.forEach(function(page) {
-
-  });
+function addVolPbTag(text) {
+  return firstLineIsPb.test(text) ? text : '<pb id="volpage"/>\n' + text;
 }
 
-function notEmptyPrePage(str) {
-  var rmPbNl = str.replace(emptyPrePageRegex, '')
-    .replace(/\s/g, '');
-  return rmPbNl !== '';
-}
-
-function paging(strs) {
-  return (prePageTag + strs.join(prePageTag))
-    .replace(/(<pb)/g, delim + '$1')
-    .split(delim)
-    .filter(notEmptyPrePage);
+function toVolTexts(texts) {
+  return texts.join('\n')
+    .replace(/(<pb id="volpage")/g, delim + '$1')
+    .split(delim);
 }
 
 function getTextsAndSplit(texts, noBampoTag) {
-  var pages = paging(texts);
-
-  if (noBampoTag) {
-
-  }
+  var texts = texts.map(addVolPbTag);
+  var volTexts = toVolTexts(texts);
+  console.log(volTexts[1]);
 }
 
 module.exports = getTextsAndSplit;
