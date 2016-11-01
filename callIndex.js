@@ -16,6 +16,6 @@ var texts = fileRoutes.map(function(route) {
   return fs.readFileSync(route, 'utf8');
 });
 
-var bampos = makeBampos(texts, noBampoTag);
+var bampos = makeBampos(fileRoutes, texts, noBampoTag);
 
 //console.log(bampos);
