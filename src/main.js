@@ -1,5 +1,7 @@
 var firstLineIsPb = /^\s*?<pb id/;
 var delim = 'IAmDelimiter';
+var volRegex = /<vol n="([\d-\.]+?)"[^<>]+?>/;
+var pbRegex = /<pb id="[\d-\.]+?[^<>]+?\/>/;
 
 var sutraRegex = /<sutra id="[^<>]*(\d+)[^<>\d]*"\/>/;
 
@@ -21,9 +23,27 @@ function toVolTexts(texts, firstFile) {
   }
 }
 
+function toVolObjs(volTexts) {
+  var results = [];
+  for (var i = 0; i < volTexts.length; i++) {
+    var text = volTexts[i];
+    var volTag = text.match(volRegex);
+
+    if (! volTag) {
+      console.log('We can\'t find volumn tag before', text.match(pbRegex)[0]);
+    }
+    else {
+      var volN = volTag[1];
+      results.push({'volN': volN, 'volText': text});
+    }
+  }
+  return results;
+}
+
 function getTextsAndSplit(fileRoutes, texts, noBampoTag) {
   var texts = texts.map(addVolPbTag);
   var volTexts = toVolTexts(texts, fileRoutes[0]);
+  var volObjs = toVolObjs(volTexts);
 }
 
 module.exports = getTextsAndSplit;
