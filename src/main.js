@@ -2,16 +2,16 @@ var firstLineIsPb = /^\s*?<pb id/;
 var delim = 'IAmDelimiter';
 var volRegex = /<vol n="([\d-\.]+?)"[^<>]+?>/;
 var pbRegex = /<pb id="[\d-\.]+?[^<>]+?\/>/;
-
 var sutraRegex = /<sutra id="[^<>]*(\d+)[^<>\d]*"\/>/;
+
+var splitWoBampo = require('./splitWoBampo.js');
 
 function addVolPbTag(text) {
   return firstLineIsPb.test(text) ? text : '<pb id="volpage"/>\n' + text;
 }
 
-function toVolTexts(texts, firstFile) {
-  var volTexts = texts.join('\n')
-    .replace(/(<pb id="volpage")/g, delim + '$1')
+function toVolTexts(wholeText, firstFile) {
+  var volTexts = wholeText.replace(/(<pb id="volpage")/g, delim + '$1')
     .split(delim);
 
   if (volTexts[0].trim()) {
@@ -40,10 +40,25 @@ function toVolObjs(volTexts) {
   return results;
 }
 
+function has(regex, str) {
+  return regex.test(str);
+}
+
 function getTextsAndSplit(fileRoutes, texts, noBampoTag) {
   var texts = texts.map(addVolPbTag);
-  var volTexts = toVolTexts(texts, fileRoutes[0]);
+  var wholeText = texts.join('\n');
+  var volTexts = toVolTexts(wholeText, fileRoutes[0]);
   var volObjs = toVolObjs(volTexts);
+  noBampoTag = true;
+
+  if (noBampoTag) {
+    if (has(sutraRegex, wholeText)) {
+      splitWoBampo(fileRoutes, volObjs);
+    }
+    else {
+      console.log('We can\'t split without bampo if no sutra tag in all texts.')
+    }
+  }
 }
 
 module.exports = getTextsAndSplit;
