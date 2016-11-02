@@ -54,8 +54,11 @@ function getTextsAndSplit(fileRoutes, texts, noBampoTag) {
   noBampoTag = true;
 
   if (noBampoTag) {
-    if (has(sutraRegex, wholeText)) {
-      splitWoBampo(fileRoutes, volObjs);
+    var firstSutraTag = wholeText.match(sutraRegex);
+
+    if (firstSutraTag) {
+      var firstSutraId = firstSutraTag[1];
+      splitWoBampo(fileRoutes, volObjs, firstSutraId);
     }
     else {
       console.log('We can\'t split without bampo if no sutra tag in all texts.')
