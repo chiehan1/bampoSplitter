@@ -1,6 +1,5 @@
-//input [strs]
-//output [{vol, [objs]}, {vol, [objs]}]
-//obj {bampo id, str}
+require('babel-register');
+require('babel-polyfill');
 
 var getTextsAndSplit = require('./src/main.js'); 
 

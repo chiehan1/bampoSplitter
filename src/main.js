@@ -4,7 +4,8 @@ var volRegex = /<vol n="([\d-\.]+?)"[^<>]+?>/;
 var pbRegex = /<pb id="[\d-\.]+?[^<>]+?\/>/;
 var sutraRegex = /<sutra id="[^<>]*(\d+)[^<>\d]*"\/>/;
 
-var splitWoBampo = require('./splitWoBampo.js');
+import splitWoBampo from './splitWoBampo.js';
+//var splitWoBampo = require('./splitWoBampo.js');
 
 function addVolPbTag(text) {
   return firstLineIsPb.test(text) ? text : '<pb id="volpage"/>\n' + text;
