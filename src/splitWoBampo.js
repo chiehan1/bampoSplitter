@@ -8,8 +8,10 @@ var tools = require('./helper.js');
 var has = tools.has;
 
 function splitBySutraPage(volText) {
-  return volText.replace(sutraPageRegex, delim + '$1')
+  var resultTexts = volText.replace(sutraPageRegex, delim + '$1')
     .split(delim);
+
+  return resultTexts[0].trim() ? resultTexts : resultTexts.slice(1);
 }
 
 function splitWoBampo(fileRoutes, volObjs, sutraId) {
