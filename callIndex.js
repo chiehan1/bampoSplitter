@@ -14,7 +14,8 @@ var makeBampos = require('./index.js');
 
 var fileRoutes = glob.sync(routesForGlob, {'nosort': true});
 var texts = fileRoutes.map(function(route) {
-  return fs.readFileSync(route, 'utf8');
+  return fs.readFileSync(route, 'utf8')
+    .replace(/^\s*\n/gm, '');
 });
 
 var bamposInVols = makeBampos(fileRoutes, texts, noBampoTag);
