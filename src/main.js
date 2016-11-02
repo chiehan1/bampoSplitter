@@ -4,9 +4,7 @@ var volRegex = /<vol n="([\d-\.]+?)"[^<>]+?>/;
 var pbRegex = /<pb id="[\d-\.]+?[^<>]+?\/>/;
 var sutraRegex = /<sutra id="[^<>]*(\d+)[^<>\d]*"\/>/;
 
-var tools = require('./helper.js');
 var splitWoBampo = require('./splitWoBampo.js');
-var has = tools.has;
 
 function addVolPbTag(text) {
   return firstLineIsPb.test(text) ? text : '<pb id="volpage"/>\n' + text;
@@ -40,10 +38,6 @@ function toVolObjs(volTexts) {
     }
   }
   return results;
-}
-
-function has(regex, str) {
-  return regex.test(str);
 }
 
 function getTextsAndSplit(fileRoutes, texts, noBampoTag) {

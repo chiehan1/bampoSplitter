@@ -13,15 +13,11 @@ function splitBySutraPage(volText) {
 }
 
 function splitWoBampo(fileRoutes, volObjs, sutraId) {
-
   volObjs.forEach(function(volObj) {
     var volText = volObj.volText;
     var texts = splitBySutraPage(volText);
 /*
     texts.forEach(function(text) {
-      if (sutraId) {
-
-      }
 
       if (has(sutraRegex, text)) {
         var sutraIds = text.match(allSutraRegex);
