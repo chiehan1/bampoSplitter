@@ -1,6 +1,6 @@
-var dbName = process.argv[2];
-var noBampoTag = process.argv[3];
-var routesForGlob = './unSplittedTexts/**/*.*(txt|xml)';
+var dbName = process.argv[2] || '8thkarmapa';
+var noBampoTag = process.argv[3] || true;
+var inputPattern = './unSplittedTexts/**/*.*(txt|xml)';
 var outputFolder = './splittedFolders';
 
 // modules
@@ -10,9 +10,9 @@ var mkdirp = require('mkdirp');
 var fs = require('fs');
 var makeBampos = require('./index.js');
 
-// process
+// input strings by the help of glob module and output files to ./splittedFolders
 
-var fileRoutes = glob.sync(routesForGlob, {'nosort': true});
+var fileRoutes = glob.sync(inputPattern, {'nosort': true});
 var texts = fileRoutes.map(function(route) {
   return fs.readFileSync(route, 'utf8')
     .replace(/^\s*\n/gm, '');
@@ -22,11 +22,11 @@ var bamposInVols = makeBampos(fileRoutes, texts, noBampoTag);
 
 bamposInVols.forEach(function(bamposInVol) {
   var folder = './splittedFolders/' + dbName + bamposInVol.volN;
-  mkdirp.sync(folder);
+  //mkdirp.sync(folder);
+  console.log(folder);
   bamposInVol.bampoObjs.forEach(function(bampoObj) {
     var fileName = dbName + bampoObj.bampoN + '.xml';
-    fs.writeFileSync(folder + '/' + fileName, bampoObj.bampoText, 'utf8');
+    //fs.writeFileSync(folder + '/' + fileName, bampoObj.bampoText, 'utf8');
+    console.log(fileName);
   });
 });
-
-//console.log(bamposInVols);
