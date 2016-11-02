@@ -26,7 +26,7 @@ function toVolTexts(wholeText, firstFile) {
 function toVolObjs(volTexts) {
   var results = [];
   for (var i = 0; i < volTexts.length; i++) {
-    var text = volTexts[i];
+    var text = volTexts[i].replace(/<pb id="volpage"\/>\n/, '');
     var volTag = text.match(volRegex);
 
     if (! volTag) {
@@ -48,14 +48,13 @@ function getTextsAndSplit(fileRoutes, texts, noBampoTag) {
   noBampoTag = true;
 
   if (noBampoTag) {
-    var firstSutraTag = wholeText.match(sutraRegex);
+    var sutraTagInFirstVol = volObjs[0].volText.match(sutraRegex);
 
-    if (firstSutraTag) {
-      var firstSutraId = firstSutraTag[1];
-      splitWoBampo(fileRoutes, volObjs, firstSutraId);
+    if (sutraTagInFirstVol) {
+      return splitWoBampo(volObjs);
     }
     else {
-      console.log('We can\'t split without bampo if no sutra tag in all texts.')
+      console.log('We can\'t split without bampo if no sutra tag in first volumn.')
     }
   }
 }

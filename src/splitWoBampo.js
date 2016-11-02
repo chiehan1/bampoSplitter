@@ -2,37 +2,71 @@ var sutraRegex = /<sutra id="[^<>]*(\d+)[^<>\d]*"\/>/;
 var sutraPageRegex = /(<pb id[^<>]+?>(?=([\s\S](?!<pb))*?(?=<sutra)))/g;
 var delim = 'IAmDelimiter';
 var sutraRegex = /<sutra id="[^<>]*(\d+)[^<>\d]*"\/>/;
-var allSutraRegex = /<sutra id="[^<>]*(\d+)[^<>\d]*"\/>/g;
-
-var tools = require('./helper.js');
-var has = tools.has;
+var allSutraRegex = /<sutra id="[^<>]*\d+[^<>\d]*"\/>/g;
 
 function splitBySutraPage(volText) {
   var resultTexts = volText.replace(sutraPageRegex, delim + '$1')
     .split(delim);
+  resultTexts.splice(0, 2, resultTexts[0].concat(resultTexts[1]));
 
-  return resultTexts[0].trim() ? resultTexts : resultTexts.slice(1);
+  return resultTexts;
 }
 
-function splitWoBampo(fileRoutes, volObjs, sutraId) {
-  volObjs.forEach(function(volObj) {
-    var volText = volObj.volText;
-    var texts = splitBySutraPage(volText);
-/*
-    texts.forEach(function(text) {
+function toPages(text) {
+  var resultTexts = text.replace(/(<pb id)/g, delim + '$1')
+    .split(delim);
+  resultTexts.splice(0, 2, resultTexts[0].concat(resultTexts[1]));
 
-      if (has(sutraRegex, text)) {
-        var sutraIds = text.match(allSutraRegex);
-        if (1 === sutraIds.length) {
-          sutraId = sutraIds[0].match(sutraRegex)[1];
+  return resultTexts;
+}
+
+function splitWoBampo(volObjs) {
+  var sutraId, bampoCount;
+
+  volObjs.map(function(volObj) {
+    var bampoObjs = [];
+    var volText = volObj.volText;
+    var hasSutraTag = volText.match(sutraRegex);
+
+    if (hasSutraTag) {
+      var sutraTexts = splitBySutraPage(volText);
+
+      sutraTexts.forEach(function(sutraText) {
+        var sutraTags = sutraText.match(allSutraRegex);
+        sutraId = sutraTags[sutraTags.length - 1].match(sutraRegex)[1];
+        bampoCount = 1;
+        var pages = toPages(sutraText);
+
+        while(pages.length > 0) {
+          var resultObj = {};
+          var bampoText = pages.splice(0, 40)
+            .join('');
+          var bampoN = sutraId + '_' + bampoCount;
+          resultObj['bampoN'] = bampoN;
+          resultObj['bampoText'] = bampoText;
+          bampoObjs.push(resultObj);
+          bampoCount ++;
         }
-        var firstSutraIds = sutraIds[0];
-        var lastSutraIds = sutraIds[sutraIds.length - 1];
+      });
+    }
+    else {
+      var pages = toPages(volText);
+
+      while(pages.length > 0) {
+        var resultObj = {};
+        var bampoText = pages.splice(0, 40)
+          .join('');
+        var bampoN = sutraId + '_' + bampoCount;
+        resultObj['bampoN'] = bampoN;
+        resultObj['bampoText'] = bampoText;
+        bampoObjs.push(resultObj);
+        bampoCount ++;
       }
-    });
-*/
-    console.log(texts.length === 1 || texts[0]);
+    }
+    volObj.bampoObjs = bampoObjs;
+    return volObj;
   });
+  return volObjs;
 }
 
 module.exports = splitWoBampo;

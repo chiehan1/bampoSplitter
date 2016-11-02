@@ -1,4 +1,5 @@
-var noBampoTag = process.argv[2];
+var dbName = process.argv[2];
+var noBampoTag = process.argv[3];
 var routesForGlob = './unSplittedTexts/**/*.*(txt|xml)';
 var outputFolder = './splittedFolders';
 
@@ -16,6 +17,15 @@ var texts = fileRoutes.map(function(route) {
   return fs.readFileSync(route, 'utf8');
 });
 
-var bampos = makeBampos(fileRoutes, texts, noBampoTag);
+var bamposInVols = makeBampos(fileRoutes, texts, noBampoTag);
 
-//console.log(bampos);
+bamposInVols.forEach(function(bamposInVol) {
+  var folder = './splittedFolders/' + dbName + bamposInVol.volN;
+  mkdirp.sync(folder);
+  bamposInVol.bampoObjs.forEach(function(bampoObj) {
+    var fileName = dbName + bampoObj.bampoN + '.xml';
+    fs.writeFileSync(folder + '/' + fileName, bampoObj.bampoText, 'utf8');
+  });
+});
+
+//console.log(bamposInVols);
