@@ -36,6 +36,7 @@ function toVolObjs(volTexts) {
     }
     else {
       var volN = volTag[1];
+      console.log(volN);
       results.push({'volN': volN, 'volText': text});
     }
   }
@@ -59,7 +60,7 @@ function getTextsAndSplit(fileRoutes, texts, noBampoTag) {
     }
   }
   else {
-    splitWithBampo(volObjs);
+      return splitWithBampo(volObjs);
   }
 }
 

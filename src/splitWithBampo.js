@@ -1,5 +1,5 @@
 var bampoPageRegex = /(<pb id[^<>]+?>(?=([\s\S](?!<pb))*?(?=<bampo)))/g;
-var bampoRegex = /<bampo n=""\/>/g;
+var bampoRegex = /<bampo n="(\d+[a-z]?)\.(\d+)([^<>\d][^<>]*?)?"\/>/;
 
 function splitBampos(text) {
   var delim = '~!@#$%';
@@ -13,14 +13,33 @@ function splitBampos(text) {
 function splitWithBampo(volObjs) {
   var bamposInVols = volObjs.map(function(volObj) {
     var volText = volObj.volText;
-    if (volText)
-    var bampoTexts = volText.map(splitBampos);
+    var bampoTag = volText.match(bampoRegex)
 
-    bampoTexts.forEach(function(bampoText) {
+    if (! bampoTag) {
+      console.log('We don\'t have bampo in vol', volObj.volN);
+    }
+    else {
+      var bampoTexts = splitBampos(volText);
 
-    });
+      var bampoObjs = bampoTexts.map(function(bampoText) {
+        var resultObj = {};
+        var firstBampoTag = bampoText.match(bampoRegex);
+        var sutraId = firstBampoTag[1];
+        var bampoN = firstBampoTag[2];
+
+        resultObj['bampoN'] = sutraId + '_' + bampoN;
+        resultObj['bampoText'] = bampoText;
+
+        return resultObj;
+      });
+
+      volObj['bampoObjs'] = bampoObjs;
+
+      return volObj;
+    }
   });
-  return;
+
+  return bamposInVols;
 }
 
 module.exports = splitWithBampo;

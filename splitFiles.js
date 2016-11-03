@@ -20,7 +20,6 @@ var texts = fileRoutes.map(function(route) {
 
 var bamposInVols = makeBampos(fileRoutes, texts, noBampoTag);
 
-/*
 bamposInVols.forEach(function(bamposInVol) {
   var folder = './splittedFolders/' + dbName + bamposInVol.volN;
   //mkdirp.sync(folder);
@@ -31,4 +30,3 @@ bamposInVols.forEach(function(bamposInVol) {
     console.log(fileName);
   });
 });
-*/
