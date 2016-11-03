@@ -33,7 +33,7 @@ function splitWoBampo(volObjs) {
 
       sutraTexts.forEach(function(sutraText) {
         var sutraTags = sutraText.match(allSutraRegex);
-        sutraId = sutraTags[sutraTags.length - 1].match(sutraRegex)[1];
+        sutraId = Number(sutraTags[sutraTags.length - 1].match(sutraRegex)[1]);
         bampoCount = 1;
         var pages = toPages(sutraText);
 

@@ -36,7 +36,6 @@ function toVolObjs(volTexts) {
     }
     else {
       var volN = volTag[1];
-      console.log(volN);
       results.push({'volN': volN, 'volText': text});
     }
   }
@@ -56,11 +55,17 @@ function getTextsAndSplit(fileRoutes, texts, noBampoTag) {
       return splitWoBampo(volObjs);
     }
     else {
-      console.log('We can\'t split without bampo if no sutra tag in first volumn.')
+      console.log('We can\'t split without bampo if no sutra tag in first volumn.');
     }
   }
   else {
+    var sutraOrBampoTagInFirstVol = volObjs[0].volText.match(/<(sutra|bampo)[^<>\n]+?>/);
+    if (sutraOrBampoTagInFirstVol) {
       return splitWithBampo(volObjs);
+    }
+    else {
+      console.log('We can\'t split with bampo if no sutra or bampo tag in first volumn.');
+    }
   }
 }
 
