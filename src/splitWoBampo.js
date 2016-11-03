@@ -1,7 +1,7 @@
-var sutraRegex = /<sutra id="[^<>]*(\d+)[^<>\d]*"\/>/;
+var sutraRegex = /<sutra id="[^<>]*(\d+[^<>\d]*)"\/>/;
 var sutraPageRegex = /(<pb id[^<>]+?>(?=([\s\S](?!<pb))*?(?=<sutra)))/g;
 var delim = 'IAmDelimiter';
-var sutraRegex = /<sutra id="[^<>]*(\d+)[^<>\d]*"\/>/;
+var sutraRegex = /<sutra id="[^<>]*(\d+[^<>\d]*)"\/>/;
 var allSutraRegex = /<sutra id="[^<>]*\d+[^<>\d]*"\/>/g;
 
 function splitBySutraPage(volText) {

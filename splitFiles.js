@@ -1,5 +1,5 @@
-var dbName = process.argv[2] || '8thkarmapa';
-var noBampoTag = process.argv[3] || true;
+var dbName = process.argv[2] || 'degekangyur';
+var noBampoTag = process.argv[3] || false;
 var inputPattern = './unSplittedTexts/**/*.*(txt|xml)';
 var outputFolder = './splittedFolders';
 
@@ -20,6 +20,7 @@ var texts = fileRoutes.map(function(route) {
 
 var bamposInVols = makeBampos(fileRoutes, texts, noBampoTag);
 
+/*
 bamposInVols.forEach(function(bamposInVol) {
   var folder = './splittedFolders/' + dbName + bamposInVol.volN;
   //mkdirp.sync(folder);
@@ -30,3 +31,4 @@ bamposInVols.forEach(function(bamposInVol) {
     console.log(fileName);
   });
 });
+*/

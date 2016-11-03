@@ -5,6 +5,7 @@ var pbRegex = /<pb id="[\d-\.]+?[^<>]+?\/>/;
 var sutraRegex = /<sutra id="[^<>]*(\d+)[^<>\d]*"\/>/;
 
 import splitWoBampo from './splitWoBampo.js';
+import splitWithBampo from './splitWithBampo.js';
 //var splitWoBampo = require('./splitWoBampo.js');
 
 function addVolPbTag(text) {
@@ -46,7 +47,6 @@ function getTextsAndSplit(fileRoutes, texts, noBampoTag) {
   var wholeText = texts.join('\n');
   var volTexts = toVolTexts(wholeText, fileRoutes[0]);
   var volObjs = toVolObjs(volTexts);
-  noBampoTag = true;
 
   if (noBampoTag) {
     var sutraTagInFirstVol = volObjs[0].volText.match(sutraRegex);
@@ -57,6 +57,9 @@ function getTextsAndSplit(fileRoutes, texts, noBampoTag) {
     else {
       console.log('We can\'t split without bampo if no sutra tag in first volumn.')
     }
+  }
+  else {
+    splitWithBampo(volObjs);
   }
 }
 
