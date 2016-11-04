@@ -61,10 +61,11 @@ function getTextsAndSplit(fileRoutes, texts, noBampoTag) {
   else {
     var firstVolText = volObjs[0].volText;
     var hasSutraTag = firstVolText.match(sutraRegex);
-    var hasNormalBampoTag = firstVolText.match(/<bampo n="\d\.\d"\/>/);
-    var has3numberBampoTag = firstVolText.match(/<bampo n="\d\.\d\.1"\/>/);
+    var hasNormalBampoTag = firstVolText.match(/<bampo n="\d+\.\d+"\/>/);
+    var has3numberBampoTag = firstVolText.match(/<bampo n="\d+\.\d+\.1"\/>/);
 
     var sutraOrBampoTagInFirstVol = hasSutraTag || hasNormalBampoTag || has3numberBampoTag;
+
     if (sutraOrBampoTagInFirstVol) {
       return splitWithBampo(volObjs);
     }
