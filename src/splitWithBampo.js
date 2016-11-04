@@ -98,22 +98,18 @@ function splitWithBampo(volObjs) {
 
     if (has(bampoRegex, volText)) {
       var objsAndBampoN = splitByBampoTag(volText);
-      lastBampoN = objsAndBampoN.lastBampoN;
-
-      return objsAndBampoN.bampoObjs;
     }
     else if (has(sutraRegex, volText)) {
       var objsAndBampoN = splitBySutraTag(volText);
-      lastBampoN = objsAndBampoN.lastBampoN;
-
-      return objsAndBampoN.bampoObjs;
     }
     else {
       var objsAndBampoN = splitBy40Pages(volText);
-      lastBampoN = objsAndBampoN.lastBampoN;
-
-      return objsAndBampoN.bampoObjs;
     }
+
+    lastBampoN = objsAndBampoN.lastBampoN;
+    volObj['bampoObjs'] = objsAndBampoN.bampoObjs;
+
+    return volObj;
   });
 
   return bamposInVols;

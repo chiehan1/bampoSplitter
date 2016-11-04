@@ -6,6 +6,7 @@ var sutraRegex = /<sutra id="[^<>]*(\d+)[^<>\d]*"\/>/;
 
 import splitWoBampo from './splitWoBampo.js';
 import splitWithBampo from './splitWithBampo.js';
+import repeatBampoN from './repeatBampoN.js';
 //var splitWoBampo = require('./splitWoBampo.js');
 
 function addVolPbTag(text) {
@@ -47,12 +48,13 @@ function getTextsAndSplit(fileRoutes, texts, noBampoTag) {
   var wholeText = texts.join('\n');
   var volTexts = toVolTexts(wholeText, fileRoutes[0]);
   var volObjs = toVolObjs(volTexts);
+  var bamposInVols;
 
   if (noBampoTag) {
     var sutraTagInFirstVol = volObjs[0].volText.match(sutraRegex);
 
     if (sutraTagInFirstVol) {
-      return splitWoBampo(volObjs);
+      bamposInVols = splitWoBampo(volObjs);
     }
     else {
       console.log('We can\'t split without bampo if no sutra tag in first volumn.');
@@ -66,11 +68,20 @@ function getTextsAndSplit(fileRoutes, texts, noBampoTag) {
     var sutraOrBampoTagInFirstVol = hasNormalBampoTag || has3numberBampoTag;
 
     if (sutraOrBampoTagInFirstVol) {
-      return splitWithBampo(volObjs);
+      bamposInVols = splitWithBampo(volObjs);
     }
     else {
       console.log('We can\'t split with bampo if no starting bampo tag in first volumn.');
     }
+  }
+
+  var repeatBampoNInfo = repeatBampoN(bamposInVols);
+
+  if (repeatBampoNInfo) {
+    console.log('We have repeat bampoN:', repeatBampoNInfo);
+  }
+  else {
+    return bamposInVols;
   }
 }
 
