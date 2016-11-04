@@ -67,6 +67,12 @@ function objsBySutra(sutraText) {
 function splitBySutraTag(text) {
   var bampoTexts = textsBy(sutraPageRegex, text);
   var bampoObjsInSutras = bampoTexts.map(objsBySutra);
+  var bampoObjs = bampoObjsInSutras.reduce(function(arr1, arr2) {
+    return arr1.concat(arr2);
+  });
+  var lastBampoN = bampoObjs[bampoObjs.length - 1].bampoN;
+
+  return {'bampoObjs': bampoObjs, 'lastBampoN': lastBampoN};
 }
 
 //
@@ -85,9 +91,9 @@ function splitWithBampo(volObjs) {
     }
     else if (has(sutraRegex, volText)) {
       var objsAndBampoN = splitBySutraTag(volText);
-      //lastBampoN = objsAndBampoN.lastBampoN;
+      lastBampoN = objsAndBampoN.lastBampoN;
 
-      //return objsAndBampoN.bampoObjs;
+      return objsAndBampoN.bampoObjs;
     }
     else {
 
