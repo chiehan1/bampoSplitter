@@ -9,12 +9,12 @@ var delim = '~!@#$%';
 var tools = require('./tools.js');
 var has = tools.has;
 
-function bampoTextsBy(pageRegex, text) {
-  var bampoTexts = text.replace(pageRegex, delim + '$1')
+function textsBy(pageRegex, originalText) {
+  var texts = originalText.replace(pageRegex, delim + '$1')
     .split(delim);
-  bampoTexts.splice(0, 2, bampoTexts[0].concat(bampoTexts[1]));
+  texts.splice(0, 2, texts[0].concat(texts[1]));
 
-  return bampoTexts;
+  return texts;
 }
 
 // split with bampo tag
@@ -32,7 +32,7 @@ function objsByBampo(bampoText) {
 }
 
 function splitByBampoTag(text) {
-  var bampoTexts = bampoTextsBy(bampoPageRegex, text);
+  var bampoTexts = textsBy(bampoPageRegex, text);
   var bampoObjs = bampoTexts.map(objsByBampo);
   var lastBampoN = bampoObjs.pop().bampoN;
 
@@ -50,7 +50,7 @@ function objsBySutra(sutraText) {
 }
 
 function splitBySutraTag(text) {
-  var bampoTexts = bampoTextsBy(sutraPageRegex, text);
+  var bampoTexts = textsBy(sutraPageRegex, text);
   var bampoObjs = bampoTexts.map(objsBySutra);
 }
 
