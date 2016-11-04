@@ -1,6 +1,7 @@
 var bampoPageRegex = /(<pb id[^<>]+?>(?=([\s\S](?!<pb))*?(?=<bampo n="\d+[a-z]?\.\d+(\.1)?"\/>)))/g;
 var bampoRegex = /<bampo n="(\d+[a-z]?)\.(\d+)(\.1)?"\/>/;
 var allBampoRegex = /<bampo n="(\d+[a-z]?)\.(\d+)(\.1)?"\/>/g;
+var sutraPageRegex = /(<pb id[^<>]+?>(?=([\s\S](?!<pb))*?(?=<sutra id="[^<>]+?"\/>)))/g;
 var sutraRegex = /<sutra id="[^<>]*(\d+)[^<>\d]*"\/>/;
 var delim = '~!@#$%';
 
@@ -14,6 +15,8 @@ function bampoTextsBy(pageRegex, text) {
 
   return bampoTexts;
 }
+
+// split with bampo tag
 
 function useBampoTag2objs(bampoText) {
   var bampoObj = {};
@@ -35,6 +38,14 @@ function splitByBampoTag(text) {
   return {'bampoObjs': bampoObjs, 'lastBampoN': lastBampoN};
 }
 
+// split with sutra tag
+
+function splitBySutraTag(text) {
+  var bampoTexts = bampoTextsBy(sutraPageRegex, text);
+}
+
+//
+
 function splitWithBampo(volObjs) {
   var lastBampoN;
 
@@ -44,11 +55,11 @@ function splitWithBampo(volObjs) {
     if (has(bampoRegex, volText)) {
       var objsAndBampoN = splitByBampoTag(volText);
       lastBampoN = objsAndBampoN.lastBampoN;
-console.log(lastBampoN);
+
       return objsAndBampoN.bampoObjs;
     }
     else if (has(sutraRegex, volText)) {
-      //var objsAndBampoN = splitWithSutraTag(volText);
+      var objsAndBampoN = splitWithSutraTag(volText);
       //lastBampoN = objsAndBampoN.lastBampoN;
 
       //return objsAndBampoN.bampoObjs;
