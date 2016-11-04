@@ -7,6 +7,14 @@ var delim = '~!@#$%';
 var tools = require('./tools.js');
 var has = tools.has;
 
+function bampoTextsBy(pageRegex, text) {
+  var bampoTexts = text.replace(pageRegex, delim + '$1')
+    .split(delim);
+  bampoTexts.splice(0, 2, bampoTexts[0].concat(bampoTexts[1]));
+
+  return bampoTexts;
+}
+
 function useBampoTag2objs(bampoText) {
   var bampoObj = {};
   var lastBampoTag = bampoText.match(allBampoRegex)
@@ -19,11 +27,8 @@ function useBampoTag2objs(bampoText) {
   return bampoObj;
 }
 
-function splitWithBampoTag(text) {
-  var bampoTexts = text.replace(bampoPageRegex, delim + '$1')
-    .split(delim);
-  bampoTexts.splice(0, 2, bampoTexts[0].concat(bampoTexts[1]));
-
+function splitByBampoTag(text) {
+  var bampoTexts = bampoTextsBy(bampoPageRegex, text);
   var bampoObjs = bampoTexts.map(useBampoTag2objs);
   var lastBampoN = bampoObjs.pop().bampoN;
 
@@ -37,7 +42,7 @@ function splitWithBampo(volObjs) {
     var volText = volObj.volText;
 
     if (has(bampoRegex, volText)) {
-      var objsAndBampoN = splitWithBampoTag(volText);
+      var objsAndBampoN = splitByBampoTag(volText);
       lastBampoN = objsAndBampoN.lastBampoN;
 console.log(lastBampoN);
       return objsAndBampoN.bampoObjs;
