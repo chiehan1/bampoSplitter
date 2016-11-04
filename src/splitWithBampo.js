@@ -35,7 +35,7 @@ function objsByBampo(bampoText) {
 function splitByBampoTag(text) {
   var bampoTexts = textsBy(bampoPageRegex, text);
   var bampoObjs = bampoTexts.map(objsByBampo);
-  var lastBampoN = bampoObjs.pop().bampoN;
+  var lastBampoN = bampoObjs[bampoObjs.length - 1].bampoN;
 
   return {'bampoObjs': bampoObjs, 'lastBampoN': lastBampoN};
 }
