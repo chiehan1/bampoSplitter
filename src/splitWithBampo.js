@@ -4,6 +4,9 @@ var allBampoRegex = /<bampo n="(\d+[a-z]?)\.(\d+)(\.1)?"\/>/g;
 var sutraRegex = /<sutra id="[^<>]*(\d+)[^<>\d]*"\/>/;
 var delim = '~!@#$%';
 
+var tools = require('./tools.js');
+var has = tools.has;
+
 function useBampoTag2objs(bampoText) {
   var bampoObj = {};
   var lastBampoTag = bampoText.match(allBampoRegex)
@@ -32,17 +35,18 @@ function splitWithBampo(volObjs) {
 
   var bamposInVols = volObjs.map(function(volObj) {
     var volText = volObj.volText;
-    var bampoTag = volText.match(bampoRegex);
-    var sutraTag = volText.match(sutraRegex);
 
-    if (bampoTag) {
+    if (has(bampoRegex, volText)) {
       var objsAndBampoN = splitWithBampoTag(volText);
       lastBampoN = objsAndBampoN.lastBampoN;
-
+console.log(lastBampoN);
       return objsAndBampoN.bampoObjs;
     }
-    else if (sutraTag) {
+    else if (has(sutraRegex, volText)) {
       //var objsAndBampoN = splitWithSutraTag(volText);
+      //lastBampoN = objsAndBampoN.lastBampoN;
+
+      //return objsAndBampoN.bampoObjs;
     }
     else {
 
