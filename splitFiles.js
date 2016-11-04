@@ -22,11 +22,9 @@ var bamposInVols = makeBampos(fileRoutes, texts, noBampoTag);
 
 bamposInVols.forEach(function(bamposInVol) {
   var folder = './splittedFolders/' + dbName + bamposInVol.volN;
-  //mkdirp.sync(folder);
-  console.log(folder);
+  mkdirp.sync(folder);
   bamposInVol.bampoObjs.forEach(function(bampoObj) {
     var fileName = dbName + bampoObj.bampoN + '.xml';
-    //fs.writeFileSync(folder + '/' + fileName, bampoObj.bampoText, 'utf8');
-    console.log(fileName);
+    fs.writeFileSync(folder + '/' + fileName, bampoObj.bampoText, 'utf8');
   });
 });
