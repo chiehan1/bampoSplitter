@@ -4,6 +4,7 @@ var allBampoRegex = /<bampo n="\d+[a-z]?\.\d+(\.1)?"\/>/g;
 var sutraPageRegex = /(<pb id[^<>]+?>(?=([\s\S](?!<pb))*?(?=<sutra id="[^<>]+?"\/>)))/g;
 var sutraRegex = /<sutra id="[^<>]*[^\d](\d+)[^<>\d]*"\/>/;
 var allSutraRegex = /<sutra id="[^<>]*[^\d]\d+[^<>\d]*"\/>/g;
+var pbRegex = /<pb id="[^<>]+?"\/>/g;
 var delim = '~!@#$%';
 
 var tools = require('./tools.js');
@@ -42,16 +43,30 @@ function splitByBampoTag(text) {
 // split with sutra tag
 
 function objsBySutra(sutraText) {
+  var bampoObjs = [];
   var lastSutraTag = sutraText.match(allSutraRegex)
     .pop()
     .match(sutraRegex);
   var sutraId = lastSutraTag[1];
-  console.log(sutraId);
+  var pages = textsBy(pbRegex, sutraText);
+  var bampoCount = 1;
+
+  do {
+    var bampoObj = {};
+    bampoObj['bampoText'] = pages.splice(0, 40)
+      .join('');
+    bampoObj['bampoN'] = sutraId + '_' + bampoCount;
+    bampoObjs.push(bampoObj);
+    bampoCount ++;
+  }
+  while (pages.length > 0);
+
+  return bampoObjs;
 }
 
 function splitBySutraTag(text) {
   var bampoTexts = textsBy(sutraPageRegex, text);
-  var bampoObjs = bampoTexts.map(objsBySutra);
+  var bampoObjsInSutras = bampoTexts.map(objsBySutra);
 }
 
 //
