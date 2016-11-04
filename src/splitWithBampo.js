@@ -5,6 +5,8 @@ var sutraRegex = /<sutra id="[^<>]*[^\d](\d+)[^<>\d]*"\/>/;
 var pbRegex = /<pb id="[^<>]+?"\/>/g;
 var delim = '~!@#$%';
 
+// global functions
+
 var tools = require('./tools.js');
 var has = tools.has;
 
@@ -16,15 +18,32 @@ function textsBy(pageRegex, originalText) {
   return texts;
 }
 
+function objsBy40pages(sutraId, lastCount, text) {
+  var bampoObjs = [];
+  var pages = textsBy(pbRegex, text);
+
+  do {
+    lastCount ++;
+    var bampoObj = {};
+    bampoObj['bampoText'] = pages.splice(0, 40)
+      .join('');
+    bampoObj['bampoN'] = sutraId + '_' + lastCount;
+    bampoObjs.push(bampoObj);
+  }
+  while (pages.length > 0);
+
+  return bampoObjs;
+}
+
 // split by bampo tag
 
 function objsByBampo(bampoText) {
   var bampoObj = {};
-  var lastBampoTag = bampoText.match(new RegExp(bampoRegex, 'g'))
+  var finalBampoTag = bampoText.match(new RegExp(bampoRegex, 'g'))
     .pop()
     .match(bampoRegex);
 
-  bampoObj['bampoN'] = lastBampoTag[1] + '_' + lastBampoTag[2];
+  bampoObj['bampoN'] = finalBampoTag[1] + '_' + finalBampoTag[2];
   bampoObj['bampoText'] = bampoText;
 
   return bampoObj;
@@ -41,25 +60,11 @@ function splitByBampoTag(text) {
 // split by sutra tag
 
 function objsBySutra(sutraText) {
-  var bampoObjs = [];
-  var lastSutraTag = sutraText.match(new RegExp(sutraRegex, 'g'))
+  var finalSutraTagInfo = sutraText.match(new RegExp(sutraRegex, 'g'))
     .pop()
     .match(sutraRegex);
-  var sutraId = lastSutraTag[1];
-  var pages = textsBy(pbRegex, sutraText);
-  var bampoCount = 1;
 
-  do {
-    var bampoObj = {};
-    bampoObj['bampoText'] = pages.splice(0, 40)
-      .join('');
-    bampoObj['bampoN'] = sutraId + '_' + bampoCount;
-    bampoObjs.push(bampoObj);
-    bampoCount ++;
-  }
-  while (pages.length > 0);
-
-  return bampoObjs;
+  return objsBy40pages(finalSutraTagInfo[1], 0, sutraText);
 }
 
 function splitBySutraTag(text) {
@@ -76,22 +81,8 @@ function splitBySutraTag(text) {
 // split as (1 bampo / 40 pages) 
 
 function splitBy40Pages(lastBampoN, text) {
-  var bampoObjs = [];
   var lastBampoInfo = lastBampoN.match(/(\d+[a-z])\.(\d+)/);
-  var sutraId = lastBampoInfo[1];
-  var bampoCount = lastBampoInfo[2];
-  var pages = textsBy(pbRegex, text);
-
-  do {
-    var bampoObj = {};
-    bampoObj['bampoText'] = pages.splice(0, 40)
-      .join('');
-    bampoObj['bampoN'] = sutraId + '_' + bampoCount;
-    bampoObjs.push(bampoObj);
-    bampoCount ++;
-  }
-  while (pages.length > 0);
-
+  var bampoObjs = splitBy40Pages(lastBampoInfo[1], lastBampoInfo[2], text);
   var lastBampoN = bampoObjs[bampoObjs.length - 1].bampoN;
 
   return {'bampoObjs': bampoObjs, 'lastBampoN': lastBampoN};
