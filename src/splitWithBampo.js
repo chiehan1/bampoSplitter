@@ -16,7 +16,7 @@ function textsBy(pageRegex, originalText) {
   return texts;
 }
 
-// split with bampo tag
+// split by bampo tag
 
 function objsByBampo(bampoText) {
   var bampoObj = {};
@@ -38,7 +38,7 @@ function splitByBampoTag(text) {
   return {'bampoObjs': bampoObjs, 'lastBampoN': lastBampoN};
 }
 
-// split with sutra tag
+// split by sutra tag
 
 function objsBySutra(sutraText) {
   var bampoObjs = [];
@@ -73,7 +73,31 @@ function splitBySutraTag(text) {
   return {'bampoObjs': bampoObjs, 'lastBampoN': lastBampoN};
 }
 
-//
+// split as (1 bampo / 40 pages) 
+
+function splitBy40Pages(lastBampoN, text) {
+  var bampoObjs = [];
+  var lastBampoInfo = lastBampoN.match(/(\d+[a-z])\.(\d+)/);
+  var sutraId = lastBampoInfo[1];
+  var bampoCount = lastBampoInfo[2];
+  var pages = textsBy(pbRegex, text);
+
+  do {
+    var bampoObj = {};
+    bampoObj['bampoText'] = pages.splice(0, 40)
+      .join('');
+    bampoObj['bampoN'] = sutraId + '_' + bampoCount;
+    bampoObjs.push(bampoObj);
+    bampoCount ++;
+  }
+  while (pages.length > 0);
+
+  var lastBampoN = bampoObjs[bampoObjs.length - 1].bampoN;
+
+  return {'bampoObjs': bampoObjs, 'lastBampoN': lastBampoN};
+}
+
+// main code
 
 function splitWithBampo(volObjs) {
   var lastBampoN;
@@ -94,7 +118,10 @@ function splitWithBampo(volObjs) {
       return objsAndBampoN.bampoObjs;
     }
     else {
+      var objsAndBampoN = splitBy40Pages(volText);
+      lastBampoN = objsAndBampoN.lastBampoN;
 
+      return objsAndBampoN.bampoObjs;
     }
   });
 
