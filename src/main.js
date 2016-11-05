@@ -1,19 +1,19 @@
-var firstLineIsPb = /^\s*?<pb id/;
-var delim = 'IAmDelimiter';
-var volRegex = /<vol n="([\d-\.]+?)"[^<>]+?>/;
-var pbRegex = /<pb id="[\d-\.]+?[^<>]+?\/>/;
-var sutraRegex = /<sutra id="[^<>]*(\d+)[^<>\d]*"\/>/;
+const firstLineIsPb = /^\s*?<pb id/;
+const delim = 'IAmDelimiter';
+const volRegex = /<vol n="([\d-\.]+?)"[^<>]+?>/;
+const pbRegex = /<pb id="[\d-\.]+?[^<>]+?\/>/;
+const sutraRegex = /<sutra id="[^<>]*(\d+)[^<>\d]*"\/>/;
 
+import verify from './verifyCondition.js';
 import splitWoBampo from './splitWoBampo.js';
 import splitWithBampo from './splitWithBampo.js';
 import repeatBampoN from './repeatBampoN.js';
-//var splitWoBampo = require('./splitWoBampo.js');
 
-function addVolPbTag(text) {
+let addVolPbTag = (text) => {
   return firstLineIsPb.test(text) ? text : '<pb id="volpage"/>\n' + text;
-}
+};
 
-function toVolTexts(wholeText, firstFile) {
+let toVolTexts = (wholeText, firstFile) => {
   var volTexts = wholeText.replace(/(<pb id="volpage")/g, delim + '$1')
     .split(delim);
 
@@ -24,9 +24,9 @@ function toVolTexts(wholeText, firstFile) {
     volTexts.shift();
     return volTexts;
   }
-}
+};
 
-function toVolObjs(volTexts) {
+let toVolObjs = (volTexts) => {
   var results = [];
   for (var i = 0; i < volTexts.length; i++) {
     var text = volTexts[i].replace(/<pb id="volpage"\/>\n/, '');
@@ -43,7 +43,7 @@ function toVolObjs(volTexts) {
   return results;
 }
 
-function getTextsAndSplit(fileRoutes, texts, noBampoTag) {
+let verifyAndSplit = (fileRoutes, texts, noBampoTag) => {
   var texts = texts.map(addVolPbTag);
   var wholeText = texts.join('\n');
   var volTexts = toVolTexts(wholeText, fileRoutes[0]);
@@ -83,6 +83,6 @@ function getTextsAndSplit(fileRoutes, texts, noBampoTag) {
   else {
     return bamposInVols;
   }
-}
+};
 
-module.exports = getTextsAndSplit;
+module.exports = verifyAndSplit;
