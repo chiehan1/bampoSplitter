@@ -15,6 +15,7 @@ var makeBampos = require('./index.js');
 var fileRoutes = glob.sync(inputPattern, {'nosort': true});
 var texts = fileRoutes.map(function(route) {
   return fs.readFileSync(route, 'utf8')
+    .replace(/[\r\n]+/g, '\n')
     .replace(/^\s*\n/gm, '');
 });
 
