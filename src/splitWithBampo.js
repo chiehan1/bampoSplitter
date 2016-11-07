@@ -2,7 +2,7 @@ var bampoPageRegex = /(<pb id[^<>]+?>(?=([\s\S](?!<pb))*?(?=<bampo n="\d+[a-z]?\
 var bampoRegex = /<bampo n="(\d+[a-z]?)\.(\d+)(\.1)?"\/>/;
 var sutraPageRegex = /(<pb id[^<>]+?>(?=([\s\S](?!<pb))*?(?=<sutra id="[^<>]+?"\/>)))/g;
 var sutraRegex = /<sutra id="[^<>]*[^\d](\d+)[^<>\d]*"\/>/;
-var pbRegex = /<pb id="[^<>]+?"\/>/g;
+var pbRegex = /(<pb id="[^<>]+?"\/>)/g;
 var delim = '~!@#$%';
 
 // global functions
