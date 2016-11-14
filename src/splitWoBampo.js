@@ -1,7 +1,7 @@
-var sutraRegex = /<sutra id="[^<>]*(\d+[^<>\d]*)"\/>/;
+var sutraRegex = /<sutra id="[^<>]*[^\d](\d+[^<>\d]*)"\/>/;
 var sutraPageRegex = /(<pb id[^<>]+?>(?=([\s\S](?!<pb))*?(?=<sutra)))/g;
 var delim = 'IAmDelimiter';
-var sutraRegex = /<sutra id="[^<>]*(\d+[^<>\d]*)"\/>/;
+var sutraRegex = /<sutra id="[^<>]*[^\d](\d+[^<>\d]*)"\/>/;
 var allSutraRegex = /<sutra id="[^<>]*\d+[^<>\d]*"\/>/g;
 
 function splitBySutraPage(volText) {
@@ -34,6 +34,7 @@ function splitWoBampo(volObjs) {
       sutraTexts.forEach(function(sutraText) {
         var sutraTags = sutraText.match(allSutraRegex);
         sutraId = Number(sutraTags[sutraTags.length - 1].match(sutraRegex)[1]);
+
         bampoCount = 1;
         var pages = toPages(sutraText);
 
