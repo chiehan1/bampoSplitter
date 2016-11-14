@@ -1,6 +1,6 @@
 require('babel-register');
 require('babel-polyfill');
 
-var getTextsAndSplit = require('./src/main.js'); 
+var split2BamposInVols = require('./src/main.js'); 
 
-module.exports = getTextsAndSplit;
+module.exports = split2BamposInVols;

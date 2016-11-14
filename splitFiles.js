@@ -1,14 +1,14 @@
-var dbName = process.argv[2] || 'degekangyur';
-var noBampoTag = process.argv[3] || false;
+var dbName = process.argv[2];
+var noBampoTag = process.argv[3];
 var inputPattern = './unSplittedTexts/**/*.*(txt|xml)';
 var outputFolder = './splittedFolders';
 
 // modules
 
+var fs = require('fs');
 var glob = require('glob');
 var mkdirp = require('mkdirp');
-var fs = require('fs');
-var makeBampos = require('./index.js');
+var split2BamposInVols = require('./index.js');
 
 // input strings by the help of glob module and output files to ./splittedFolders
 
@@ -19,7 +19,7 @@ var texts = fileRoutes.map(function(route) {
     .replace(/^\s*\n/gm, '');
 });
 
-var bamposInVols = makeBampos(fileRoutes, texts, noBampoTag);
+var bamposInVols = split2BamposInVols(fileRoutes, texts, noBampoTag);
 
 bamposInVols.forEach(function(bamposInVol) {
   var folder = './splittedFolders/' + dbName + bamposInVol.volN;
