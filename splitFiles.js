@@ -8,11 +8,13 @@ var outputFolder = './splittedFolders';
 var fs = require('fs');
 var glob = require('glob');
 var mkdirp = require('mkdirp');
+var naturalSort = require('javascript-natural-sort');
 var split2BamposInVols = require('./index.js');
 
 // input strings by the help of glob module and output files to ./splittedFolders
 
-var fileRoutes = glob.sync(inputPattern, {'nosort': true});
+var fileRoutes = glob.sync(inputPattern).sort(naturalSort);
+
 var texts = fileRoutes.map(function(route) {
   return fs.readFileSync(route, 'utf8')
     .replace(/[\r\n]+/g, '\n')
