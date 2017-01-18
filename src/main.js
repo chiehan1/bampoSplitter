@@ -28,7 +28,7 @@ let toVolTexts = (wholeText, firstFile) => {
 let toVolObjs = (volTexts) => {
   var results = [];
   for (var i = 0; i < volTexts.length; i++) {
-    var text = volTexts[i].replace(/<pb id="volpage"\/>\n/, '');
+    var text = volTexts[i];
     var volTag = text.match(volRegex);
 
     if (! volTag) {

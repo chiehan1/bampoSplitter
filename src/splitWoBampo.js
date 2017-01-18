@@ -13,7 +13,8 @@ function splitBySutraPage(volText) {
 }
 
 function toPages(text) {
-  var resultTexts = text.replace(/(<pb id)/g, delim + '$1')
+  var resultTexts = text.replace(/<pb id="volpage"\/>\n/, '')
+    .replace(/(<pb id)/g, delim + '$1')
     .split(delim);
   resultTexts.splice(0, 2, resultTexts[0].concat(resultTexts[1]));
 

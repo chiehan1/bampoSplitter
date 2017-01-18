@@ -63,6 +63,7 @@ function objsBySutra(sutraText) {
   var finalSutraTagInfo = sutraText.match(new RegExp(sutraRegex, 'g'))
     .pop()
     .match(sutraRegex);
+  sutraText = sutraText.replace(/<pb id="volpage"\/>\n/, '');
 
   return objsBy40pages(finalSutraTagInfo[1], 0, sutraText);
 }
@@ -82,7 +83,7 @@ function splitBySutraTag(text) {
 
 function splitBy40Pages(lastBampoN, text) {
   var lastBampoInfo = lastBampoN.match(/(\d+[a-z])\.(\d+)/);
-  var bampoObjs = splitBy40Pages(lastBampoInfo[1], lastBampoInfo[2], text);
+  var bampoObjs = objsBy40pages(lastBampoInfo[1], lastBampoInfo[2], text);
   var lastBampoN = bampoObjs[bampoObjs.length - 1].bampoN;
 
   return {'bampoObjs': bampoObjs, 'lastBampoN': lastBampoN};
@@ -97,12 +98,14 @@ function splitWithBampo(volObjs) {
     var volText = volObj.volText;
 
     if (has(bampoRegex, volText)) {
+      volText = volText.replace(/<pb id="volpage"\/>\n/, '');
       var objsAndBampoN = splitByBampoTag(volText);
     }
     else if (has(sutraRegex, volText)) {
       var objsAndBampoN = splitBySutraTag(volText);
     }
     else {
+      volText = volText.replace(/<pb id="volpage"\/>\n/, '');
       var objsAndBampoN = splitBy40Pages(volText);
     }
 
