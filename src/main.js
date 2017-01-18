@@ -4,7 +4,6 @@ const volRegex = /<vol n="([\d-\.]+?)"[^<>]+?>/;
 const pbRegex = /<pb id="[\d-\.]+?[^<>]+?\/>/;
 const sutraRegex = /<sutra id="[^<>]*(\d+)[^<>\d]*"\/>/;
 
-import verify from './verifyCondition.js';
 import splitWoBampo from './splitWoBampo.js';
 import splitWithBampo from './splitWithBampo.js';
 import repeatBampoN from './repeatBampoN.js';
