@@ -28,6 +28,6 @@ bamposInVols.forEach(function(bamposInVol) {
   mkdirp.sync(folder);
   bamposInVol.bampoObjs.forEach(function(bampoObj) {
     var fileName = dbName + bampoObj.bampoN + '.xml';
-    fs.writeFileSync(folder + '/' + fileName, bampoObj.bampoText, 'utf8');
+    fs.writeFileSync(folder + '/' + fileName, bampoObj.bampoText.trim(), 'utf8');
   });
 });
