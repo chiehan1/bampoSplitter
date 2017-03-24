@@ -1,2 +1,2 @@
 # file-splitter
-re-split xml files in volumn folders by volumn, sutra tags, and if there are, bampo tags.
+re-split xml files by vol tags, sutra tags, and if there are, bampo tags.
